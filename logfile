@@ -1,11 +1,16 @@
-127.0.0.1 [2016-04-16 17:10:04 -0600] "dude" 400 0
-127.0.0.1 [2016-04-16 17:10:13 -0600] "Connection: close" 400 0
-127.0.0.1 [2016-04-16 17:11:49 -0600] "hello" 400 0
-127.0.0.1 [2016-04-16 17:11:59 -0600] "GET HTTP/1.1
-Connection: close" 200 0
-127.0.0.1 [2016-04-16 17:42:37 -0600] "GET logfile HTTP/1.1
-something
-Connection: close" 200 245
-127.0.0.1 [Sun, 17 Apr 2016 00:14:52 GMT] "GET nothing.txt HTTP/1.1
-merb
-Connection: close" 200 34
+127.0.0.1 [Sun, 17 Apr 2016 01:27:46 GMT] "GET / HTTP/1.1
+" 200 4
+127.0.0.1 [Sun, 17 Apr 2016 02:00:56 GMT] "GET / HTTP/1.1
+" 200 4
+127.0.0.1 [Sun, 17 Apr 2016 02:05:21 GMT] "GET / HTTP/1.1" 200 0
+127.0.0.1 [Sun, 17 Apr 2016 02:08:31 GMT] "GET / HTTP/1.1" 200 0
+127.0.0.1 [Sun, 17 Apr 2016 02:09:56 GMT] "["GET", "/", "HTTP/1.1"]" 200 0
+127.0.0.1 [Sun, 17 Apr 2016 02:10:06 GMT] "["GET", "nothing.txt", "HTTP/1.1"]" 404 0
+127.0.0.1 [Sun, 17 Apr 2016 02:11:17 GMT] "["GET", "/nothing.txt", "HTTP/1.1"]" 404 0
+127.0.0.1 [Sun, 17 Apr 2016 02:11:38 GMT] "["GET", "/nothing.txt/", "HTTP/1.1"]" 404 0
+127.0.0.1 [Sun, 17 Apr 2016 02:17:00 GMT] "GET / HTTP/1.1" 200 0
+127.0.0.1 [Sun, 17 Apr 2016 02:17:14 GMT] "GET /nothing.txt HTTP/1.1" 404 0
+127.0.0.1 [Sun, 17 Apr 2016 02:40:02 GMT] "GET /nothing.txt HTTP/1.1" 200 34
+127.0.0.1 [Sun, 17 Apr 2016 02:40:28 GMT] "GET / HTTP/1.1" 200 0
+127.0.0.1 [Sun, 17 Apr 2016 02:41:44 GMT] "GET /nothing.txt HTTP/1.1" 200 34
+127.0.0.1 [Sun, 17 Apr 2016 02:47:54 GMT] "GET /photographer.jpg HTTP/1.1" 200 2957506
