@@ -13,22 +13,24 @@ MAX_HASH_SIZE = 10
 #File.open either opens a file or creates one if it doesn't already exist
 #the second parameter, r, means read only access . The first parameter
 #is the location of the config file, and could be /home/HAL/quoththewebserv/404.txt (but isn't)
-cnfg = Document.new(File.open('/home/george/Documents/School/networks/Webserver/conf/config.xml', "r"))
-cnfg.root.elements.each do |thing|
-	p thing
-end
+$cnfg = Document.new(File.open('/home/george/Documents/School/networks/Webserver/conf/config.xml', "r"))
 
-$config = Hash.new
-cnfg.root.elements.each do | key, value|
-	$config.store(key, value)
-	p value
-end
-#puts $config['log'].to_s.slice!('\'', '\''))
-
-#$log = File.open(($config['log'].to_s.slice!('\'', '\'')), "a") # a means that it appends only
+#this webserver uses an XML config file because that's what the assignment asks for. 
+#DO NOT DO THIS. XML has serious security holes that are better navigated by json or yaml.
+#they are also easier to use.
+$log = File.open($cnfg.elements['webserver'].elements['logfile'].attributes['log'], "a") # a means that it appends only
 
 #start up a server
 server = TCPServer.new 2880 
+
+#this is xml parsing context attributes at its least complicated. 
+#Special thanks to Violet Baddley, who actually knows how this works.
+# so open a file, and select the webserver elements. 
+#for each element name that has to do with context and documentRoot
+# select the first attribute, and turn it into a string
+$PATH = $cnfg.elements['webserver'].elements.select {|elem| 
+	elem.name == 'context' && elem.attribute('documentRoot') 
+	}.first.attribute('documentRoot').to_s
 
 class WebServer
 
@@ -56,7 +58,7 @@ class WebServer
 			@client.puts("Last-Modified: #{Time.new.httpdate}")
 			@client.puts("Server: HAL the Confused Spaceship")
 			@client.puts("Content-Type: #{get_content_type(@req[1]) unless @req[1] == '/'}")
-			@client.puts("Content-Length: #{file_contents.length}")
+			@client.puts("Content-Length: #{file_contents.size}")
 			@client.puts("")
 			@client.print(file_contents)
 			#I don't need to close it because I support persistent connections
@@ -79,7 +81,7 @@ class WebServer
 	    	#log the request
 	    	log_file(lfile)
 	    elsif e.message == "400" # if it's a 400 error
-	    	
+	    	#we don't really need to do anything
 	    else
 	    	#something else went wrong
 			p e
@@ -100,13 +102,21 @@ class WebServer
 		elsif @req[0] == 'GET' && @req[2] == "HTTP/1.1"
 			# if it's a simple GET request [client typed "GET HTTP/1.1"]
 			if @req[1] == '/'
+				#refer to notes on lines 26-33 if you don't know how this works
+				file_contents = File.open(
+					$cnfg.elements['webserver'].elements.select {|elem| 
+						elem.name == 'context' && elem.attribute('defaultDocument') 
+						}.first.attribute('defaultDocument').to_s, "r")
 			# if it's a GET request with a web address [client typed "GET something HTTP/1.1"]
-			elsif @req[2] == "HTTP/1.1"
+			else
+				# if the cache includes the file already
 				if @lst.include? @req[1]
+					#just pull it out of the cache
 					file_contents = @cache[@req[1]]
 				else
 					begin
-						file_contents = File.open(PATH + @req[1]) do |stream| 
+						#open the file from the base path as a read-only resource
+						file_contents = File.open(("#{$PATH}#{@req[1]}"), "r") do |stream| 
 							#make sure the stream is binary
 							stream.set_encoding('ASCII-8BIT')
 							#the nice thing about ruby is that you know exactly what the next line does
@@ -115,7 +125,9 @@ class WebServer
 							cache(@req[1], file_contents)
 							@cache.each_pair {|key, value| puts "#{key} is #{value}" }
 						end
-					rescue
+					rescue => e
+						#404 page!
+						file_contents = File.open('conf/404.html.erb')
 						#if the resource is not found, throw an exception 404
 						raise "404"
 					end #end file open
@@ -123,6 +135,8 @@ class WebServer
 			end #end if http/1.1
 		else
 			#otherwise it's not a valid request
+			file_contents = File.open('conf/400.html.erb')
+			# and raise the 400 error
 			raise "400"
 		end  #end if get
 		#this is a return statement

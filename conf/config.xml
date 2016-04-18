@@ -3,10 +3,9 @@
 <webserver title="Nevermore" date="17 APR 2016" author="George Hanley">
 
 	<context documentRoot="./stuff"></context>
-	<context defaultDocument="./views/index.html.erb"></context> 
+	<context defaultDocument="./src/views/index.html.erb"></context> 
 	<context directoryDefaultDocument="index.html.erb"></context>
 	<context port="2880"></context>
-
 	<logfile log="./logs/nevermore.log"></logfile> 
 
 </webserver>
