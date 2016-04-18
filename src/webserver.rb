@@ -106,7 +106,12 @@ class WebServer
 				file_contents = File.open(
 					$cnfg.elements['webserver'].elements.select {|elem| 
 						elem.name == 'context' && elem.attribute('defaultDocument') 
-						}.first.attribute('defaultDocument').to_s, "r")
+						}.first.attribute('defaultDocument').to_s, "r") do |stream|
+							#make sure the stream is binary
+							stream.set_encoding('ASCII-8BIT')
+							#the nice thing about ruby is that you know exactly what the next line does
+							stream.read
+						end
 			# if it's a GET request with a web address [client typed "GET something HTTP/1.1"]
 			else
 				# if the cache includes the file already
@@ -121,13 +126,18 @@ class WebServer
 							stream.set_encoding('ASCII-8BIT')
 							#the nice thing about ruby is that you know exactly what the next line does
 							stream.read
-							#stores the hash with req1 as the key and file_contents as the value
-							cache(@req[1], file_contents)
-							@cache.each_pair {|key, value| puts "#{key} is #{value}" }
 						end
+					#stores the hash with req1 as the key and file_contents as the value
+					cache(@req[1], file_contents)
+					@cache.each_pair {|key, value| puts "#{key} is #{value}" }
 					rescue => e
 						#404 page!
-						file_contents = File.open('conf/404.html.erb')
+						file_contents = File.open('conf/404.html.erb') do |stream|
+							#make sure the stream is binary
+							stream.set_encoding('ASCII-8BIT')
+							#the nice thing about ruby is that you know exactly what the next line does
+							stream.read
+						end
 						#if the resource is not found, throw an exception 404
 						raise "404"
 					end #end file open
@@ -135,7 +145,12 @@ class WebServer
 			end #end if http/1.1
 		else
 			#otherwise it's not a valid request
-			file_contents = File.open('conf/400.html.erb')
+			file_contents = File.open('conf/400.html.erb')do |stream|
+				#make sure the stream is binary
+				stream.set_encoding('ASCII-8BIT')
+				#the nice thing about ruby is that you know exactly what the next line does
+				stream.read
+			end
 			# and raise the 400 error
 			raise "400"
 		end  #end if get
