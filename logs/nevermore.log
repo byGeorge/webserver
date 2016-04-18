@@ -1,0 +1,15 @@
+127.0.0.1 [Sun, 17 Apr 2016 01:27:46 GMT] "GET / HTTP/1.1" 200 4
+127.0.0.1 [Sun, 17 Apr 2016 02:00:56 GMT] "GET / HTTP/1.1" 200 4
+127.0.0.1 [Sun, 17 Apr 2016 02:05:21 GMT] "GET / HTTP/1.1" 200 0
+127.0.0.1 [Sun, 17 Apr 2016 02:08:31 GMT] "GET / HTTP/1.1" 200 0
+127.0.0.1 [Sun, 17 Apr 2016 02:09:56 GMT] "["GET", "/", "HTTP/1.1"]" 200 0
+127.0.0.1 [Sun, 17 Apr 2016 02:10:06 GMT] "["GET", "nothing.txt", "HTTP/1.1"]" 404 0
+127.0.0.1 [Sun, 17 Apr 2016 02:11:17 GMT] "["GET", "/nothing.txt", "HTTP/1.1"]" 404 0
+127.0.0.1 [Sun, 17 Apr 2016 02:11:38 GMT] "["GET", "/nothing.txt/", "HTTP/1.1"]" 404 0
+127.0.0.1 [Sun, 17 Apr 2016 02:17:00 GMT] "GET / HTTP/1.1" 200 0
+127.0.0.1 [Sun, 17 Apr 2016 02:17:14 GMT] "GET /nothing.txt HTTP/1.1" 404 0
+127.0.0.1 [Sun, 17 Apr 2016 02:40:02 GMT] "GET /nothing.txt HTTP/1.1" 200 34
+127.0.0.1 [Sun, 17 Apr 2016 02:40:28 GMT] "GET / HTTP/1.1" 200 0
+127.0.0.1 [Sun, 17 Apr 2016 02:41:44 GMT] "GET /nothing.txt HTTP/1.1" 200 34
+127.0.0.1 [Sun, 17 Apr 2016 02:47:54 GMT] "GET /photographer.jpg HTTP/1.1" 200 2957506
+127.0.0.1 [Sun, 17 Apr 2016 22:08:00 GMT] "GET / HTTP/1.1" 200 0
